@@ -86,9 +86,15 @@ const ManageInternships = () => {
 
   const closeDeleteDialog = () => {
     setDeleteDialogOpen(false);
+    setSelectedInternship(null);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    if (!selectedInternship) {
+      return;
+    }
+    // TODO: integrate deletion API call
+  };
 
   const InternshipCard = ({ internship }) => (
     <Card
@@ -230,7 +236,10 @@ const ManageInternships = () => {
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete this internship?</Typography>
+          <Typography>
+            Are you sure you want to delete{' '}
+            <strong>{selectedInternship?.title || 'this internship'}</strong>?
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDeleteDialog}>Cancel</Button>
