@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Typography, Link, Stack, Grid, Divider, Skeleton } from '@mui/material';
+import { Box, Container, Typography, Link, Stack, Grid } from '@mui/material';
 import { Place as PlaceIcon, MailOutline as MailOutlineIcon } from '@mui/icons-material';
 import { questionsAPI, solutionsAPI, scholarshipsAPI, internshipsAPI } from '../utils/api';
 
 function Footer() {
-    const currentYear = new Date().getFullYear();
-
     const [stats, setStats] = useState({
         questions: 0,
         solutions: 0,
@@ -14,6 +12,7 @@ function Footer() {
         loading: true,
         error: null,
     });
+    const currentYear = new Date().getFullYear();
 
     useEffect(() => {
         let mounted = true;
@@ -100,23 +99,24 @@ function Footer() {
 
                     {/* 3. Platform Stats: Live counts from backend */}
                     <Grid item xs={12} sm={6} md={3}>
-                         <Box sx={{ textAlign: 'left' }}>
+                        <Box sx={{ textAlign: 'left' }}>
                             <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600, color: 'text.primary' }}>
                                 Platform Stats
                             </Typography>
-                            <Stack spacing={0.75}>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography variant="body2" color="text.secondary">Questions</Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography variant="body2" color="text.secondary">Solutions</Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography variant="body2" color="text.secondary">Scholarships</Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography variant="body2" color="text.secondary">Internships</Typography>
-                                </Box>
+                            <Stack spacing={1}>
+                                {[
+                                    { label: 'Questions', value: stats.questions },
+                                    { label: 'Solutions', value: stats.solutions },
+                                    { label: 'Scholarships', value: stats.scholarships },
+                                    { label: 'Internships', value: stats.internships },
+                                ].map(({ label, value }) => (
+                                    <Box key={label} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <Typography variant="body2" color="text.secondary">{label}</Typography>
+                                        <Typography variant="body2" color="text.primary">
+                                            {stats.loading ? '—' : value}
+                                        </Typography>
+                                    </Box>
+                                ))}
                                 {stats.error && (
                                     <Typography variant="caption" color="error" sx={{ mt: 1 }}>
                                         {stats.error}
@@ -151,7 +151,11 @@ function Footer() {
                     </Grid>
                 </Grid>
 
-                {/* Copyright */}
+                <Box sx={{ mt: 4, textAlign: 'center' }}>
+                    <Typography variant="caption" color="text.secondary">
+                        © {currentYear} Tenenghang Foundation. All rights reserved.
+                    </Typography>
+                </Box>
             </Container>
         </Box>
     );

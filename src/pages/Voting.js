@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Typography, Box, Grid, Card, CardContent, CardMedia, Button, CircularProgress, Alert, Chip } from '@mui/material';
 import { HowToVote as VoteIcon, EmojiEvents as TrophyIcon } from '@mui/icons-material';
 import { contestsAPI, resolveAssetUrl, votesAPI } from '../utils/api';
@@ -12,12 +12,25 @@ function Voting() {
   const [error, setError] = useState('');
   const [userVotes, setUserVotes] = useState({});
 
-  useEffect(() => {
-    fetchContests();
-    fetchUserVotes();
+  const fetchContestData = useCallback(async (contestId) => {
+    try {
+      const [contestantsResponse, statsResponse] = await Promise.all([
+        contestsAPI.getContestants(contestId),
+        contestsAPI.getStats(contestId)
+      ]);
+
+      if (contestantsResponse.success) {
+        setContestants(contestantsResponse.data);
+      }
+      if (statsResponse.success) {
+        setStats(statsResponse.data);
+      }
+    } catch (err) {
+      console.error('Error fetching contest data:', err);
+    }
   }, []);
 
-  const fetchContests = async () => {
+  const fetchContests = useCallback(async () => {
     try {
       setLoading(true);
       const response = await contestsAPI.getAll();
@@ -38,9 +51,9 @@ function Voting() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchContestData]);
 
-  const fetchUserVotes = async () => {
+  const fetchUserVotes = useCallback(async () => {
     try {
       const response = await votesAPI.getMyVotes();
       if (response.success) {
@@ -54,25 +67,12 @@ function Voting() {
     } catch (err) {
       console.error('Error fetching user votes:', err);
     }
-  };
+  }, []);
 
-  const fetchContestData = async (contestId) => {
-    try {
-      const [contestantsResponse, statsResponse] = await Promise.all([
-        contestsAPI.getContestants(contestId),
-        contestsAPI.getStats(contestId)
-      ]);
-
-      if (contestantsResponse.success) {
-        setContestants(contestantsResponse.data);
-      }
-      if (statsResponse.success) {
-        setStats(statsResponse.data);
-      }
-    } catch (err) {
-      console.error('Error fetching contest data:', err);
-    }
-  };
+  useEffect(() => {
+    fetchContests();
+    fetchUserVotes();
+  }, [fetchContests, fetchUserVotes]);
 
   const handleContestChange = (contest) => {
     setSelectedContest(contest);

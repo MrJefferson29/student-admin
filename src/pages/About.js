@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Grid, Card, CardContent, CardMedia, Paper, Divider, Button } from '@mui/material';
+import { Container, Typography, Box, Grid, Card, CardContent, CardMedia, Paper, Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import HistoryIcon from '@mui/icons-material/History';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';

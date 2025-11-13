@@ -8,7 +8,6 @@ import {
   CardContent,
   Paper,
   Divider,
-  Skeleton,
   AppBar,
   Toolbar,
   IconButton,
@@ -30,8 +29,6 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PersonIcon from '@mui/icons-material/Person';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {
   UploadFile as UploadFileIcon,
   QuestionAnswer as QuestionAnswerIcon,
@@ -39,7 +36,6 @@ import {
   Assessment as AssessmentIcon,
   Work as WorkIcon,
   History as HistoryIcon,
-  EditNote as EditNoteIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -48,19 +44,6 @@ import { questionsAPI, solutionsAPI, scholarshipsAPI, internshipsAPI } from '../
 // --- Styled Components & Constants ---
 
 const drawerWidth = 240;
-
-const StyledStatCard = styled(Card)(({ theme, gradient }) => ({
-  background: gradient,
-  color: 'white',
-  borderRadius: theme.shape.borderRadius * 2,
-  overflow: 'hidden',
-  boxShadow: theme.shadows[4],
-  transition: 'transform 0.3s',
-  '&:hover': {
-    transform: 'translateY(-4px)',
-    boxShadow: theme.shadows[8],
-  },
-}));
 
 const StyledActionCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -123,14 +106,6 @@ const adminActions = [
     path: '/admin/questions',
     color: '#1976d2',
   },
-];
-
-// *** IMPROVEMENT 1: New Administrative Tasks / Quick Links ***
-const adminTasks = [
-    { title: 'Approve Pending Solutions', path: '/admin/solutions-review', count: 5, color: '#ff9800', icon: <CheckCircleOutlineIcon /> },
-    { title: 'Add New Scholarship', path: '/admin/manage-scholarships/new', count: null, color: '#4caf50', icon: <SchoolIcon /> },
-    { title: 'Update Dashboard Copy', path: '/admin/settings/copy', count: null, color: '#2196f3', icon: <EditNoteIcon /> },
-    { title: 'Review Reported Content', path: '/admin/reports', count: 2, color: '#f44336', icon: <HistoryIcon /> },
 ];
 
 const mockRecentActivity = [
@@ -213,7 +188,7 @@ const AdminSidebar = ({ mobileOpen, handleDrawerToggle, navigate, handleLogout, 
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { user, logout, isAdmin } = useAuth(); // Assuming useAuth provides isAdmin
+  const { user, logout } = useAuth(); // Assuming useAuth provides logout
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -244,8 +219,9 @@ function Dashboard() {
   };
 
   const handleLogout = () => {
-    // Assuming useAuth context provides a logout function
-    // logout(); 
+    if (logout) {
+      logout();
+    }
     handleMenuClose();
     navigate('/login');
   };
@@ -275,19 +251,12 @@ function Dashboard() {
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
-        setStats({ ...stats, loading: false });
+        setStats((prev) => ({ ...prev, loading: false }));
       }
     };
 
     fetchStats();
   }, []);
-
-  const statCardsData = [
-    { label: 'Total Questions', value: stats.questions, icon: <UploadFileIcon />, gradient: 'linear-gradient(135deg, #1a237e 0%, #374785 100%)' },
-    { label: 'Total Solutions', value: stats.solutions, icon: <QuestionAnswerIcon />, gradient: 'linear-gradient(135deg, #534bae 0%, #7e57c2 100%)' },
-    { label: 'Active Scholarships', value: stats.scholarships, icon: <SchoolIcon />, gradient: 'linear-gradient(135deg, #c2185b 0%, #ff5252 100%)' },
-    { label: 'Active Internships', value: stats.internships, icon: <WorkIcon />, gradient: 'linear-gradient(135deg, #ff8a95 0%, #ffcc80 100%)' },
-  ];
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f4f6f8' }}>

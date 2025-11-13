@@ -17,8 +17,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { UploadFile as UploadFileIcon, Delete as DeleteIcon, Event as EventIcon } from '@mui/icons-material';
 
-// --- MOCK API UTILS (FOR RUNNABILITY) ---
-const API_URL = 'https://uba-r875.onrender.com/api'; 
 const scholarshipsAPI = {
     upload: async (uploadData) => {
         // Simulate network delay
@@ -43,15 +41,6 @@ const scholarshipsAPI = {
 };
 // ------------------------------------------
 
-// Helper function to format a Date object or string to 'YYYY-MM-DD' for HTML input
-const formatDateToHtml = (date) => {
-    if (!date) return '';
-    const d = date instanceof Date ? date : new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-};
 
 function UploadScholarship() {
   const navigate = useNavigate();

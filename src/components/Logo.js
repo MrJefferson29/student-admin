@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function Logo({ variant = 'default' }) {
   if (variant === 'favicon') {

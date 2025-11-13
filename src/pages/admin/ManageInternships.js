@@ -16,7 +16,6 @@ import {
   DialogActions,
   Link as MuiLink,
   CircularProgress,
-  Alert,
   Chip,
   Tooltip,
   Divider,
@@ -89,11 +88,17 @@ const ManageInternships = () => {
     setSelectedInternship(null);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!selectedInternship) {
       return;
     }
-    // TODO: integrate deletion API call
+    try {
+      setLoading(true);
+      // TODO: integrate deletion API call
+    } finally {
+      setLoading(false);
+      closeDeleteDialog();
+    }
   };
 
   const InternshipCard = ({ internship }) => (

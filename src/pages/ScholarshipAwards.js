@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Grid, Card, CardContent, CardMedia, CircularProgress, Alert, Chip, Link as MuiLink } from '@mui/material';
+import { Container, Typography, Box, Grid, Card, CardContent, CardMedia, CircularProgress, Alert, Link as MuiLink } from '@mui/material';
 import { LocationOn as LocationOnIcon, Link as LinkIcon } from '@mui/icons-material';
 import { scholarshipsAPI, resolveAssetUrl } from '../utils/api';
 
@@ -121,9 +121,9 @@ function ScholarshipAwards() {
                   }}
                 >
                   {scholarship.images && scholarship.images.length > 0 && resolveAssetUrl(scholarship.images[0]) && (
-                    <CardMedia
-                      component="img"
-                      height="250"
+                  <CardMedia
+                    component="img"
+                    height="250"
                       image={resolveAssetUrl(scholarship.images[0])}
                       alt={scholarship.organizationName}
                       sx={{ objectFit: 'cover' }}
@@ -142,7 +142,7 @@ function ScholarshipAwards() {
                     <Typography 
                       variant="body1" 
                       color="text.secondary"
-                      sx={{
+                      sx={{ 
                         mb: 2,
                         display: '-webkit-box',
                         WebkitLineClamp: 4,
@@ -185,4 +185,4 @@ function ScholarshipAwards() {
   );
 }
 
-export default ScholarshipAwards;
+export default ScholarshipAwards; 
