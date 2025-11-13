@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="256" fill="#1a237e"/>
+  <path d="M256 128L352 192V320L256 384L160 320V192L256 128Z" fill="white"/>
+  <path d="M256 192L304 224V288L256 320L208 288V224L256 192Z" fill="#1a237e"/>
+  <text x="256" y="450" text-anchor="middle" fill="white" font-family="Poppins" font-size="64" font-weight="700">TF</text>
+</svg> 
