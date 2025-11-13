@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Box,
@@ -39,7 +39,6 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { questionsAPI, solutionsAPI, scholarshipsAPI, internshipsAPI } from '../../utils/api';
 
 // --- Styled Components & Constants ---
 
@@ -197,13 +196,6 @@ function Dashboard() {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
 
-  const [stats, setStats] = useState({
-    questions: 0,
-    solutions: 0,
-    scholarships: 0,
-    internships: 0,
-  });
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -229,32 +221,6 @@ function Dashboard() {
     handleMenuClose();
     navigate(path);
   }
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        // Simulating the API calls to get count/length
-        const [questionsRes, solutionsRes, scholarshipsRes, internshipsRes] = await Promise.all([
-          questionsAPI.getAll().catch(() => ({ count: 120 })),
-          solutionsAPI.getAll().catch(() => ({ count: 85 })),
-          scholarshipsAPI.getAll().catch(() => ({ count: 15 })),
-          internshipsAPI.getAll().catch(() => ({ count: 22 })),
-        ]);
-
-        setStats({
-          questions: questionsRes.count || questionsRes.data?.length || 0,
-          solutions: solutionsRes.count || solutionsRes.data?.length || 0,
-          scholarships: scholarshipsRes.count || scholarshipsRes.data?.length || 0,
-          internships: internshipsRes.count || internshipsRes.data?.length || 0,
-        });
-      } catch (error) {
-        console.error('Error fetching stats:', error);
-        setStats((prev) => ({ ...prev }));
-      }
-    };
-
-    fetchStats();
-  }, []);
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f4f6f8' }}>
