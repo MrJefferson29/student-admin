@@ -202,7 +202,6 @@ function Dashboard() {
     solutions: 0,
     scholarships: 0,
     internships: 0,
-    loading: true,
   });
 
   const handleDrawerToggle = () => {
@@ -247,11 +246,10 @@ function Dashboard() {
           solutions: solutionsRes.count || solutionsRes.data?.length || 0,
           scholarships: scholarshipsRes.count || scholarshipsRes.data?.length || 0,
           internships: internshipsRes.count || internshipsRes.data?.length || 0,
-          loading: false,
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
-        setStats((prev) => ({ ...prev, loading: false }));
+        setStats((prev) => ({ ...prev }));
       }
     };
 
