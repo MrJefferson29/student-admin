@@ -28,6 +28,7 @@ import ManageCourseChapters from './pages/admin/ManageCourseChapters';
 import ManageLiveSessions from './pages/admin/ManageLiveSessions';
 import ManageConcours from './pages/admin/ManageConcours';
 import ManageSkills from './pages/admin/ManageSkills';
+import ManageLibrary from './pages/admin/ManageLibrary';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import ChangePassword from './pages/ChangePassword';
@@ -282,6 +283,14 @@ function App() {
                   element={
                     <ProtectedRoute requireAdmin>
                       <ManageSkills />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-library"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageLibrary />
                     </ProtectedRoute>
                   }
                 />

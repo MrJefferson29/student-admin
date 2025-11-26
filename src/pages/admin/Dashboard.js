@@ -104,6 +104,13 @@ const adminActions = [
     color: '#c62828',
   },
   {
+    title: 'Manage Library',
+    description: 'Upload and curate PDFs for the digital library.',
+    icon: <BookIcon />,
+    path: '/admin/manage-library',
+    color: '#6a1b9a',
+  },
+  {
     title: 'Manage Live Sessions',
     description: 'Schedule department-based live classes and chats.',
     icon: <LiveTvIcon />,

@@ -581,6 +581,46 @@ export const liveSessionsAPI = {
   },
 };
 
+// Library API
+export const libraryAPI = {
+  getAll: async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.category) params.append('category', filters.category);
+    if (filters.author) params.append('author', filters.author);
+    if (filters.query) params.append('query', filters.query);
+    const response = await api.get(`/library?${params.toString()}`);
+    return response.data;
+  },
+
+  getById: async (bookId) => {
+    const response = await api.get(`/library/${bookId}`);
+    return response.data;
+  },
+
+  create: async (formData) => {
+    const response = await api.post('/library', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  update: async (bookId, formData) => {
+    const response = await api.put(`/library/${bookId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  delete: async (bookId) => {
+    const response = await api.delete(`/library/${bookId}`);
+    return response.data;
+  },
+};
+
 export { API_URL };
 export default api;
 

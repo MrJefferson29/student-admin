@@ -38,6 +38,7 @@ function Navbar() {
     { text: 'Courses', path: '/admin/manage-courses' },
     { text: 'Concours', path: '/admin/manage-concours' },
     { text: 'Live Sessions', path: '/admin/manage-live-sessions' },
+  { text: 'Library', path: '/admin/manage-library' },
     { text: 'Contests', path: '/admin/manage-contests' },
     { text: 'Upload Question', path: '/admin/upload-question' },
     { text: 'Upload Solution', path: '/admin/upload-solution' },
