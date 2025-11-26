@@ -19,6 +19,15 @@ import UploadScholarship from './pages/admin/UploadScholarship';
 import ManageInternships from './pages/admin/ManageInternships';
 import UploadInternship from './pages/admin/UploadInternship';
 import Questions from './pages/admin/Questions';
+import ManageSchools from './pages/admin/ManageSchools';
+import ManageDepartments from './pages/admin/ManageDepartments';
+import ManageContests from './pages/admin/ManageContests';
+import ManageContestants from './pages/admin/ManageContestants';
+import ManageCourses from './pages/admin/ManageCourses';
+import ManageCourseChapters from './pages/admin/ManageCourseChapters';
+import ManageLiveSessions from './pages/admin/ManageLiveSessions';
+import ManageConcours from './pages/admin/ManageConcours';
+import ManageSkills from './pages/admin/ManageSkills';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import ChangePassword from './pages/ChangePassword';
@@ -201,6 +210,78 @@ function App() {
                   element={
                     <ProtectedRoute requireAdmin>
                       <Questions />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-schools"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageSchools />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-departments"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageDepartments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-contests"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageContests />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-contestants/:contestId"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageContestants />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-courses"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageCourses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-course-chapters/:courseId"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageCourseChapters />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-concours"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageConcours />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-live-sessions"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageLiveSessions />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-skills"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageSkills />
                     </ProtectedRoute>
                   }
                 />

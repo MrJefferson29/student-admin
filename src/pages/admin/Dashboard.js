@@ -36,6 +36,11 @@ import {
   Assessment as AssessmentIcon,
   Work as WorkIcon,
   History as HistoryIcon,
+  EmojiEvents as ContestIcon,
+  Book as BookIcon,
+  Build as BuildIcon,
+  LiveTv as LiveTvIcon,
+  PictureAsPdf as PictureAsPdfIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -71,6 +76,55 @@ const DashboardContainer = styled(Box)(({ theme }) => ({
 
 const adminActions = [
   {
+    title: 'Manage Schools',
+    description: 'Create, edit, and manage schools in the system.',
+    icon: <SchoolIcon />,
+    path: '/admin/manage-schools',
+    color: '#1e3a8a',
+  },
+  {
+    title: 'Manage Departments',
+    description: 'Create and manage departments within schools.',
+    icon: <SchoolIcon />,
+    path: '/admin/manage-departments',
+    color: '#374785',
+  },
+  {
+    title: 'Manage Courses',
+    description: 'Create, edit, and manage courses with chapters and videos.',
+    icon: <BookIcon />,
+    path: '/admin/manage-courses',
+    color: '#1976d2',
+  },
+  {
+    title: 'Manage Concours',
+    description: 'Upload and organize concours by school and department.',
+    icon: <PictureAsPdfIcon />,
+    path: '/admin/manage-concours',
+    color: '#c62828',
+  },
+  {
+    title: 'Manage Live Sessions',
+    description: 'Schedule department-based live classes and chats.',
+    icon: <LiveTvIcon />,
+    path: '/admin/manage-live-sessions',
+    color: '#0288d1',
+  },
+  {
+    title: 'Manage Skills',
+    description: 'Create, edit, and manage skills for students to learn.',
+    icon: <BuildIcon />,
+    path: '/admin/manage-skills',
+    color: '#f57c00',
+  },
+  {
+    title: 'Manage Contests',
+    description: 'Create and manage voting contests and contestants.',
+    icon: <ContestIcon />,
+    path: '/admin/manage-contests',
+    color: '#c2185b',
+  },
+  {
     title: 'Upload Question',
     description: 'Upload a new past question PDF for students.',
     icon: <UploadFileIcon />,
@@ -85,6 +139,13 @@ const adminActions = [
     color: '#374785',
   },
   {
+    title: 'View Questions',
+    description: 'Review and manage all uploaded questions and resources.',
+    icon: <HistoryIcon />,
+    path: '/admin/questions',
+    color: '#1976d2',
+  },
+  {
     title: 'Manage Scholarships',
     description: 'Create, edit, and publish scholarship opportunities.',
     icon: <SchoolIcon />,
@@ -97,13 +158,6 @@ const adminActions = [
     icon: <WorkIcon />,
     path: '/admin/manage-internships',
     color: '#ff8a95',
-  },
-  {
-    title: 'View Questions',
-    description: 'Review and manage all uploaded questions and resources.',
-    icon: <AssessmentIcon />,
-    path: '/admin/questions',
-    color: '#1976d2',
   },
 ];
 

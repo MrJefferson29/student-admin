@@ -34,6 +34,10 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    // Don't override Content-Type for FormData - let axios set it automatically with boundary
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type'];
+    }
     return config;
   },
   (error) => {
@@ -112,7 +116,6 @@ export const authAPI = {
 export const questionsAPI = {
   getAll: async (filters = {}) => {
     const params = new URLSearchParams();
-    if (filters.school) params.append('school', filters.school);
     if (filters.department) params.append('department', filters.department);
     if (filters.level) params.append('level', filters.level);
     if (filters.subject) params.append('subject', filters.subject);
@@ -286,6 +289,40 @@ export const contestsAPI = {
     const response = await api.get(`/contests/${contestId}/stats`);
     return response.data;
   },
+
+  // Create contest
+  create: async (contestData) => {
+    const response = await api.post('/contests', contestData);
+    return response.data;
+  },
+
+  // Update contest
+  update: async (contestId, contestData) => {
+    const response = await api.put(`/contests/${contestId}`, contestData);
+    return response.data;
+  },
+
+  // Delete contest
+  delete: async (contestId) => {
+    const response = await api.delete(`/contests/${contestId}`);
+    return response.data;
+  },
+
+  // Add contestant
+  addContestant: async (contestId, formData) => {
+    const response = await api.post(`/contests/${contestId}/contestants`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  // Delete contestant
+  deleteContestant: async (contestantId) => {
+    const response = await api.delete(`/contests/contestants/${contestantId}`);
+    return response.data;
+  },
 };
 
 // Votes API
@@ -299,6 +336,247 @@ export const votesAPI = {
   // Get user's votes
   getMyVotes: async () => {
     const response = await api.get('/votes/my-votes');
+    return response.data;
+  },
+};
+
+// Schools API
+export const schoolsAPI = {
+  getAll: async () => {
+    const response = await api.get('/schools');
+    return response.data;
+  },
+
+  getById: async (schoolId) => {
+    const response = await api.get(`/schools/${schoolId}`);
+    return response.data;
+  },
+
+  create: async (schoolData) => {
+    const response = await api.post('/schools', schoolData);
+    return response.data;
+  },
+
+  update: async (schoolId, schoolData) => {
+    const response = await api.put(`/schools/${schoolId}`, schoolData);
+    return response.data;
+  },
+
+  delete: async (schoolId) => {
+    const response = await api.delete(`/schools/${schoolId}`);
+    return response.data;
+  },
+};
+
+// Departments API
+export const departmentsAPI = {
+  getAll: async (schoolId = null) => {
+    const params = schoolId ? `?school=${schoolId}` : '';
+    const response = await api.get(`/departments${params}`);
+    return response.data;
+  },
+
+  getById: async (departmentId) => {
+    const response = await api.get(`/departments/${departmentId}`);
+    return response.data;
+  },
+
+  create: async (departmentData) => {
+    const response = await api.post('/departments', departmentData);
+    return response.data;
+  },
+
+  update: async (departmentId, departmentData) => {
+    const response = await api.put(`/departments/${departmentId}`, departmentData);
+    return response.data;
+  },
+
+  delete: async (departmentId) => {
+    const response = await api.delete(`/departments/${departmentId}`);
+    return response.data;
+  },
+};
+
+// Courses API
+export const coursesAPI = {
+  getAll: async (departmentId = null, level = null) => {
+    const params = new URLSearchParams();
+    if (departmentId) params.append('department', departmentId);
+    if (level) params.append('level', level);
+    const response = await api.get(`/courses?${params.toString()}`);
+    return response.data;
+  },
+
+  getById: async (courseId) => {
+    const response = await api.get(`/courses/${courseId}`);
+    return response.data;
+  },
+
+  create: async (formData) => {
+    const response = await api.post('/courses', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  update: async (courseId, formData) => {
+    const response = await api.put(`/courses/${courseId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  delete: async (courseId) => {
+    const response = await api.delete(`/courses/${courseId}`);
+    return response.data;
+  },
+};
+
+// Course Chapters API
+export const courseChaptersAPI = {
+  getByCourse: async (courseId) => {
+    const response = await api.get(`/course-chapters/course/${courseId}`);
+    return response.data;
+  },
+
+  getById: async (chapterId) => {
+    const response = await api.get(`/course-chapters/${chapterId}`);
+    return response.data;
+  },
+
+  create: async (chapterData) => {
+    const response = await api.post('/course-chapters', chapterData);
+    return response.data;
+  },
+
+  update: async (chapterId, chapterData) => {
+    const response = await api.put(`/course-chapters/${chapterId}`, chapterData);
+    return response.data;
+  },
+
+  delete: async (chapterId) => {
+    const response = await api.delete(`/course-chapters/${chapterId}`);
+    return response.data;
+  },
+};
+
+// Concours API
+export const concoursAPI = {
+  getAll: async (departmentId = null, year = null) => {
+    const params = new URLSearchParams();
+    if (departmentId) params.append('department', departmentId);
+    if (year) params.append('year', year);
+    const response = await api.get(`/concours?${params.toString()}`);
+    return response.data;
+  },
+
+  getById: async (concoursId) => {
+    const response = await api.get(`/concours/${concoursId}`);
+    return response.data;
+  },
+
+  upload: async (formData) => {
+    const response = await api.post('/concours', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  update: async (concoursId, formData) => {
+    const response = await api.put(`/concours/${concoursId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  delete: async (concoursId) => {
+    const response = await api.delete(`/concours/${concoursId}`);
+    return response.data;
+  },
+};
+
+// Skills API
+export const skillsAPI = {
+  getAll: async (category = null) => {
+    const params = new URLSearchParams();
+    if (category) params.append('category', category);
+    const response = await api.get(`/skills?${params.toString()}`);
+    return response.data;
+  },
+
+  getById: async (skillId) => {
+    const response = await api.get(`/skills/${skillId}`);
+    return response.data;
+  },
+
+  create: async (formData) => {
+    const response = await api.post('/skills', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  update: async (skillId, formData) => {
+    const response = await api.put(`/skills/${skillId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  delete: async (skillId) => {
+    const response = await api.delete(`/skills/${skillId}`);
+    return response.data;
+  },
+};
+
+// Live Sessions API
+export const liveSessionsAPI = {
+  getAll: async (params = {}) => {
+    const search = new URLSearchParams(params);
+    const query = search.toString();
+    const response = await api.get(`/live-sessions${query ? `?${query}` : ''}`);
+    return response.data;
+  },
+
+  getById: async (sessionId) => {
+    const response = await api.get(`/live-sessions/${sessionId}`);
+    return response.data;
+  },
+
+  create: async (payload) => {
+    const response = await api.post('/live-sessions', payload);
+    return response.data;
+  },
+
+  update: async (sessionId, payload) => {
+    const response = await api.put(`/live-sessions/${sessionId}`, payload);
+    return response.data;
+  },
+
+  start: async (sessionId) => {
+    const response = await api.patch(`/live-sessions/${sessionId}/start`);
+    return response.data;
+  },
+
+  end: async (sessionId) => {
+    const response = await api.patch(`/live-sessions/${sessionId}/end`);
+    return response.data;
+  },
+
+  delete: async (sessionId) => {
+    const response = await api.delete(`/live-sessions/${sessionId}`);
     return response.data;
   },
 };

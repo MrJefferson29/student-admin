@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Box,
@@ -16,27 +16,43 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { UploadFile as UploadFileIcon } from '@mui/icons-material';
-import { questionsAPI } from '../../utils/api';
+import { questionsAPI, departmentsAPI } from '../../utils/api';
 
-// Common options (you can expand these based on your data)
-const schools = ['Coltech', 'Naphpi', 'Faculty of Arts', 'Faculty of Science'];
-const departments = ['Computer Science', 'Mathematics', 'Physics', 'Chemistry', 'Biology'];
 const levels = ['Level 100', 'Level 200', 'Level 300', 'Level 400'];
-const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science'];
 
 function UploadQuestion() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    school: '',
     department: '',
     level: '',
     subject: '',
     year: '',
   });
-  const [file, setFile] = useState(null);
+  const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+  const [file, setFile] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      setFetching(true);
+      const response = await departmentsAPI.getAll();
+      if (response.success) {
+        setDepartments(response.data || []);
+      }
+    } catch (err) {
+      setError('Failed to load departments');
+      console.error('Error fetching departments:', err);
+    } finally {
+      setFetching(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -63,7 +79,7 @@ function UploadQuestion() {
     setSuccess('');
 
     // Validation
-    if (!formData.school || !formData.department || !formData.level || !formData.subject || !formData.year) {
+    if (!formData.department || !formData.level || !formData.subject || !formData.year) {
       setError('Please fill in all fields');
       return;
     }
@@ -77,7 +93,6 @@ function UploadQuestion() {
 
     try {
       const uploadData = new FormData();
-      uploadData.append('school', formData.school);
       uploadData.append('department', formData.department);
       uploadData.append('level', formData.level);
       uploadData.append('subject', formData.subject);
@@ -90,7 +105,6 @@ function UploadQuestion() {
         setSuccess('Question uploaded successfully!');
         // Reset form
         setFormData({
-          school: '',
           department: '',
           level: '',
           subject: '',
@@ -98,7 +112,8 @@ function UploadQuestion() {
         });
         setFile(null);
         // Clear file input
-        document.getElementById('pdf-upload').value = '';
+        const fileInput = document.getElementById('pdf-upload');
+        if (fileInput) fileInput.value = '';
 
         // Redirect after 2 seconds
         setTimeout(() => {
@@ -138,45 +153,35 @@ function UploadQuestion() {
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth required>
-                <InputLabel>School</InputLabel>
-                <Select
-                  name="school"
-                  value={formData.school}
-                  onChange={handleChange}
-                  label="School"
-                  disabled={loading}
-                >
-                  {schools.map((school) => (
-                    <MenuItem key={school} value={school}>
-                      {school}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth required>
-                <InputLabel>Department</InputLabel>
-                <Select
-                  name="department"
-                  value={formData.department}
-                  onChange={handleChange}
-                  label="Department"
-                  disabled={loading}
-                >
-                  {departments.map((dept) => (
-                    <MenuItem key={dept} value={dept}>
-                      {dept}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+        {fetching ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : departments.length === 0 ? (
+          <Alert severity="warning">
+            No departments found. Please create departments first.
+          </Alert>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
+                  <InputLabel>Department</InputLabel>
+                  <Select
+                    name="department"
+                    value={formData.department}
+                    onChange={handleChange}
+                    label="Department"
+                    disabled={loading}
+                  >
+                    {departments.map((dept) => (
+                      <MenuItem key={dept._id} value={dept._id}>
+                        {dept.name} {dept.school && `(${dept.school.name || dept.school})`}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth required>
@@ -198,23 +203,18 @@ function UploadQuestion() {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth required>
-                <InputLabel>Subject</InputLabel>
-                <Select
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  label="Subject"
-                  disabled={loading}
-                >
-                  {subjects.map((subject) => (
-                    <MenuItem key={subject} value={subject}>
-                      {subject}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+  <TextField
+    fullWidth
+    label="Subject"
+    name="subject"
+    value={formData.subject}
+    onChange={handleChange}
+    required
+    disabled={loading}
+    placeholder="Enter subject (e.g., Mathematics)"
+  />
+</Grid>
+
 
             <Grid item xs={12} sm={6}>
               <TextField
@@ -294,6 +294,7 @@ function UploadQuestion() {
             </Grid>
           </Grid>
         </form>
+        )}
       </Paper>
     </Container>
   );
