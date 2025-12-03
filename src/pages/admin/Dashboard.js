@@ -41,6 +41,7 @@ import {
   Build as BuildIcon,
   LiveTv as LiveTvIcon,
   PictureAsPdf as PictureAsPdfIcon,
+  Notifications as NotificationsIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -165,6 +166,13 @@ const adminActions = [
     icon: <WorkIcon />,
     path: '/admin/manage-internships',
     color: '#ff8a95',
+  },
+  {
+    title: 'Manage Notifications',
+    description: 'Create and manage platform notifications with images or videos.',
+    icon: <NotificationsIcon />,
+    path: '/admin/manage-notifications',
+    color: '#FF0000',
   },
 ];
 
