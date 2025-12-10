@@ -44,6 +44,7 @@ const ManageLibrary = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [formData, setFormData] = useState(defaultForm);
   const [file, setFile] = useState(null);
+  const [thumbnailFile, setThumbnailFile] = useState(null);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -97,10 +98,12 @@ const ManageLibrary = () => {
         publishedDate: book.publishedDate || '',
       });
       setFile(null);
+      setThumbnailFile(null);
     } else {
       setSelectedBook(null);
       setFormData(defaultForm);
       setFile(null);
+      setThumbnailFile(null);
     }
     setDialogOpen(true);
   };
@@ -110,6 +113,7 @@ const ManageLibrary = () => {
     setSelectedBook(null);
     setFormData(defaultForm);
     setFile(null);
+    setThumbnailFile(null);
     setError('');
   };
 
@@ -131,6 +135,7 @@ const ManageLibrary = () => {
       if (formData.description) payload.append('description', formData.description);
       if (formData.publishedDate) payload.append('publishedDate', formData.publishedDate);
       if (file) payload.append('pdf', file);
+      if (thumbnailFile) payload.append('thumbnail', thumbnailFile);
 
       if (selectedBook) {
         await libraryAPI.update(selectedBook._id, payload);
@@ -314,18 +319,40 @@ const ManageLibrary = () => {
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             />
             <Box sx={{ mt: 2 }}>
-              <Button variant="outlined" component="label" startIcon={<PdfIcon />}>
-                {file ? file.name : 'Upload PDF'}
-                <input type="file" hidden accept="application/pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-              </Button>
-              {selectedBook?.pdfUrl && !file && (
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  Current file:{' '}
-                  <Button variant="text" size="small" onClick={() => window.open(selectedBook.pdfUrl, '_blank', 'noopener')}>
-                    Open current PDF
+              <Stack spacing={2}>
+                <Box>
+                  <Button variant="outlined" component="label" startIcon={<PdfIcon />} fullWidth>
+                    {file ? file.name : 'Upload PDF'}
+                    <input type="file" hidden accept="application/pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} />
                   </Button>
-                </Typography>
-              )}
+                  {selectedBook?.pdfUrl && !file && (
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      Current file:{' '}
+                      <Button variant="text" size="small" onClick={() => window.open(selectedBook.pdfUrl, '_blank', 'noopener')}>
+                        Open current PDF
+                      </Button>
+                    </Typography>
+                  )}
+                </Box>
+                <Box>
+                  <Button variant="outlined" component="label" startIcon={<MenuBookIcon />} fullWidth>
+                    {thumbnailFile ? thumbnailFile.name : 'Upload Thumbnail (Optional)'}
+                    <input type="file" hidden accept="image/*" onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)} />
+                  </Button>
+                  {selectedBook?.thumbnail?.url && !thumbnailFile && (
+                    <Box sx={{ mt: 1 }}>
+                      <Typography variant="body2" sx={{ mb: 1 }}>Current thumbnail:</Typography>
+                      <img src={selectedBook.thumbnail.url} alt="Thumbnail" style={{ maxWidth: '100%', maxHeight: 150, borderRadius: 4 }} />
+                    </Box>
+                  )}
+                  {thumbnailFile && (
+                    <Box sx={{ mt: 1 }}>
+                      <Typography variant="body2" sx={{ mb: 1 }}>Preview:</Typography>
+                      <img src={URL.createObjectURL(thumbnailFile)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 150, borderRadius: 4 }} />
+                    </Box>
+                  )}
+                </Box>
+              </Stack>
             </Box>
           </Box>
         </DialogContent>
