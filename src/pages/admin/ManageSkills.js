@@ -25,10 +25,13 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Build as BuildIcon,
+  VideoLibrary as VideoIcon,
 } from '@mui/icons-material';
 import { skillsAPI, resolveAssetUrl } from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 const ManageSkills = () => {
+  const navigate = useNavigate();
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -226,6 +229,13 @@ const ManageSkills = () => {
                   )}
                 </CardContent>
                 <CardActions>
+                  <Button
+                    size="small"
+                    startIcon={<VideoIcon />}
+                    onClick={() => navigate(`/admin/manage-skill-chapters/${skill._id}`)}
+                  >
+                    Chapters
+                  </Button>
                   <IconButton
                     color="primary"
                     onClick={() => handleOpenDialog(skill)}

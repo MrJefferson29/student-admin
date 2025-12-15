@@ -25,6 +25,7 @@ import ManageContests from './pages/admin/ManageContests';
 import ManageContestants from './pages/admin/ManageContestants';
 import ManageCourses from './pages/admin/ManageCourses';
 import ManageCourseChapters from './pages/admin/ManageCourseChapters';
+import ManageSkillChapters from './pages/admin/ManageSkillChapters';
 import ManageLiveSessions from './pages/admin/ManageLiveSessions';
 import ManageConcours from './pages/admin/ManageConcours';
 import ManageSkills from './pages/admin/ManageSkills';
@@ -260,6 +261,14 @@ function App() {
                   element={
                     <ProtectedRoute requireAdmin>
                       <ManageCourseChapters />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/manage-skill-chapters/:skillId"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ManageSkillChapters />
                     </ProtectedRoute>
                   }
                 />

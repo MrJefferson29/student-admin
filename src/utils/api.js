@@ -541,6 +541,34 @@ export const skillsAPI = {
   },
 };
 
+// Skill Chapters API
+export const skillChaptersAPI = {
+  getBySkill: async (skillId) => {
+    const response = await api.get(`/skill-chapters/skill/${skillId}`);
+    return response.data;
+  },
+
+  getById: async (chapterId) => {
+    const response = await api.get(`/skill-chapters/${chapterId}`);
+    return response.data;
+  },
+
+  create: async (payload) => {
+    const response = await api.post('/skill-chapters', payload);
+    return response.data;
+  },
+
+  update: async (chapterId, payload) => {
+    const response = await api.put(`/skill-chapters/${chapterId}`, payload);
+    return response.data;
+  },
+
+  delete: async (chapterId) => {
+    const response = await api.delete(`/skill-chapters/${chapterId}`);
+    return response.data;
+  },
+};
+
 // Live Sessions API
 export const liveSessionsAPI = {
   getAll: async (params = {}) => {
